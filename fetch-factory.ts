@@ -1,6 +1,6 @@
 
 type ResponseHandler<T> = (resp: Response, req: Request) => Promise<T>;
-type ErrorHandler = (err: any, req: Request) => Promise<any>;
+type ErrorHandler = (err: any, req: Request) => void;
 
 interface RequestInitExt extends RequestInit {
   data?: any;
@@ -113,14 +113,13 @@ class FetchFactory<T = any> extends Callable {
       if (this.#fetchTracer) {
         response = await this.#fetchTracer(req);
       } else {
-        response = await fetch(req).catch((reason: any) => {
-          throw new Error(reason);
-        });
+        response = await fetch(req)
       }
       const handledResp = this.#responseHandler!(response, req) as M;
       return handledResp;
     } catch (e) {
-      return this.#errorHandler(e, req) as Promise<M>;
+      this.#errorHandler(e, req);
+      return Promise.reject(e);
     }
   }
 
