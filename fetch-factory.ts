@@ -79,6 +79,10 @@ class FetchFactory<T = any> extends Callable {
     this.#errorHandler = errorHandler;
   }
 
+  setResponseHandler(handler: ResponseHandler<T>) {
+    this.#responseHandler = handler;
+  }
+
   // fetch
   async _call<M = any>(input: string | URL, init?: RequestInitExt): Promise<M> {
     if (init?.data) {
