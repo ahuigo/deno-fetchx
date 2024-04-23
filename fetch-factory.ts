@@ -30,6 +30,16 @@ export function addSearchParams(
   return url;
 }
 
+
+function hasHeader(headers: HeadersInit, key: string): boolean {
+  if (headers instanceof Array) {
+    return headers.some(([k]) => k === key);
+  } else if (headers instanceof Headers) {
+    return headers.has(key);
+  } else {
+    return key in headers;
+  }
+}
 /**
  *
  * @param headers
@@ -37,7 +47,7 @@ export function addSearchParams(
  * @param value
  * @returns
  */
-function addHeader(headers: HeadersInit, key: string, value: string) {
+function setHeader(headers: HeadersInit, key: string, value: string) {
   if (headers instanceof Array) {
     headers.push([key, value]);
   } else if (headers instanceof Headers) {
@@ -49,9 +59,9 @@ function addHeader(headers: HeadersInit, key: string, value: string) {
   return headers;
 }
 
-function addHeaders(headers: HeadersInit, newHeaders: Record<string, string>) {
+function setHeaders(headers: HeadersInit, newHeaders: Record<string, string>) {
   for (const [key, value] of Object.entries(newHeaders)) {
-    addHeader(headers, key, value);
+    setHeader(headers, key, value);
   }
   return headers;
 }
@@ -87,17 +97,26 @@ class FetchFactory<T = any> extends Callable {
   async _call<M = any>(input: string | URL, init?: RequestInitExt): Promise<M> {
     if (init?.data) {
       if (typeof init.data === 'string'
+        || init.data instanceof ArrayBuffer
+        || init.data instanceof Number
+        || typeof init.data === 'number'
         || init.data instanceof URLSearchParams
       ) {
-        init.headers = addHeader(init?.headers ?? {}, 'Content-Type', 'application/x-www-form-urlencoded');
-        init.body = init.data;
+        if (!hasHeader(init?.headers ?? {}, 'Content-Type')) {
+          init.headers = setHeader(init?.headers ?? {}, 'Content-Type', 'application/x-www-form-urlencoded');
+        }
+        init.body = `${init.data}`;
       } else if (
         init.data instanceof FormData
         || init.data instanceof Blob
       ) {
         init.body = init.data;
       } else {
-        init.json = init.data;
+        init.headers = setHeader(init?.headers ?? {}, 'Content-Type', 'application/x-www-form-urlencoded');
+        init.body = Object.entries(init.data)
+          .map(
+            ([key, val]) => encodeURIComponent(key) + '=' + encodeURIComponent(val as any)
+          ).join('&');
       }
       delete init.data;
     }
@@ -105,8 +124,8 @@ class FetchFactory<T = any> extends Callable {
       input = addSearchParams(init.params, input);
       delete init.params;
     }
-    if (init?.json) {
-      init.headers = addHeader(init?.headers ?? {}, 'Content-Type', 'application/json');
+    if (init?.json !== undefined) {
+      init.headers = setHeader(init?.headers ?? {}, 'Content-Type', 'application/json');
       init.body = JSON.stringify(init.json);
       delete init.json;
     }
@@ -117,7 +136,7 @@ class FetchFactory<T = any> extends Callable {
       if (this.#fetchTracer) {
         response = await this.#fetchTracer(req);
       } else {
-        response = await fetch(req)
+        response = await fetch(req);
       }
       const handledResp = this.#responseHandler!(response, req) as M;
       return handledResp;
@@ -128,7 +147,7 @@ class FetchFactory<T = any> extends Callable {
   }
 
   withHeader(key: string, value: string) {
-    this.#defaultInit.headers = addHeader(this.#defaultInit.headers ?? {}, key, value);
+    this.#defaultInit.headers = setHeader(this.#defaultInit.headers ?? {}, key, value);
     return this;
   }
 

@@ -32,6 +32,8 @@
     "https://deno.land/std@0.219.0/assert/mod.ts": "7e41449e77a31fef91534379716971bebcfc12686e143d38ada5438e04d4a90e",
     "https://deno.land/std@0.219.0/assert/unimplemented.ts": "47ca67d1c6dc53abd0bd729b71a31e0825fc452dbcd4fde4ca06789d5644e7fd",
     "https://deno.land/std@0.219.0/assert/unreachable.ts": "3670816a4ab3214349acb6730e3e6f5299021234657eefe05b48092f3848c270",
-    "https://deno.land/std@0.219.0/fmt/colors.ts": "d239d84620b921ea520125d778947881f62c50e78deef2657073840b8af9559a"
+    "https://deno.land/std@0.219.0/fmt/colors.ts": "d239d84620b921ea520125d778947881f62c50e78deef2657073840b8af9559a",
+    "https://deno.land/x/fetchx@v0.0.3/fetch-factory.ts": "e04eb1950433efb4b92eb6391bf410b0e8bdd95f6f7056ec68dc5ab3b5eab8c7",
+    "https://deno.land/x/fetchx@v0.0.3/main.ts": "57d920e66dec6159107b89bcb7fbf92f3bdab0f42bf83318c25012c314f98943"
   }
 }

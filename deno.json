@@ -8,6 +8,8 @@
     }
   },
   "imports": {
+    "$fetchx/": "./",
+    "$fetchx_online/": "https://deno.land/x/fetchx@v0.0.3/",
     "$std/": "https://deno.land/std@0.219.0/"
   }
 
