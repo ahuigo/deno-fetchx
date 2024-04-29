@@ -92,6 +92,12 @@ class FetchFactory<T = any> extends Callable {
   setResponseHandler(handler: ResponseHandler<T>) {
     this.#responseHandler = handler;
   }
+  withResponseHandler(handler: ResponseHandler<T>) {
+    return new FetchFactoryAlias(this.#defaultInit, handler, this.#errorHandler);
+  }
+  withErrorHandler(errHandler: ErrorHandler) {
+    return new FetchFactoryAlias(this.#defaultInit, this.#responseHandler, errHandler);
+  } 
 
   // fetch
   async _call<M = any>(input: string | URL, init?: RequestInitExt): Promise<M> {

@@ -2,8 +2,8 @@ import { assertEquals } from "$std/assert/mod.ts";
 import { fetchx, responseJsonHandler } from "$fetchx/main.ts";
 
 Deno.test(async function fetchResponseJsonHandler() {
-  fetchx.setResponseHandler(responseJsonHandler);
-  const data = await fetchx<any>("https://httpbin.org/post", {
+  const fetchx2 = fetchx.withResponseHandler(responseJsonHandler);
+  const data = await fetchx2<any>("https://httpbin.org/post", {
     method: "POST",
     json: {
       "name": "Alex",

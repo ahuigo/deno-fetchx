@@ -9,27 +9,6 @@ interface ErrorResponseData {
 }
 
 
-/**
- * 
- * @param err 
- * @param req 
- */
-function errorHandler(err: any, req: Request) {
-  const url = req.url;
-  const msg = `can't access: ${url.slice(0, 200)}\n`;
-  console.error(msg, err);
-  throw Error(err);
-}
-
-/**
- * 
- * @param response 
- * @param request 
- * @returns 
- */
-const responseDefaultHandler = <T = any>(response: Response, request: Request): Promise<T> => {
-  return Promise.resolve(response) as Promise<T>;
-};
 
 /**
  * 
@@ -59,7 +38,25 @@ export const responseJsonHandler = async <T = any>(response: Response, request: 
 
 /**
  * 
+ * @param response 
+ * @param request 
+ * @returns 
  */
+const responseDefaultHandler = <T = any>(response: Response, request: Request): Promise<T> => {
+  return Promise.resolve(response) as Promise<T>;
+};
+/**
+ * 
+ * @param err 
+ * @param req 
+ */
+function errorHandler(err: any, req: Request) {
+  const url = req.url;
+  const msg = `can't access: ${url.slice(0, 200)}\n`;
+  console.error(msg, err);
+  throw Error(err);
+}
+
 export const fetchx = new FetchFactory(
   {
     mode: "cors",
