@@ -60,7 +60,7 @@ function errorHandler(err: any, req: Request) {
 export const fetchx = new FetchFactory(
   {
     mode: "cors",
-    credentials: 'include', // include cookie
+    credentials: 'same-origin', // "include" | "omit" | "same-origin";
   },
   responseDefaultHandler,
   errorHandler,
