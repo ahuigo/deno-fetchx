@@ -2,7 +2,7 @@
 type ResponseHandler<T> = (resp: Response, req: Request) => Promise<T>;
 type ErrorHandler = (err: any, req: Request) => void;
 
-interface RequestInitExt extends RequestInit {
+export interface RequestInitExt extends RequestInit {
   data?: any;
   params?: object | URLSearchParams;
   json?: Record<string, any> | string | number | Array<unknown>;
