@@ -89,12 +89,33 @@ class FetchFactory<T = any> extends Callable {
     this.#errorHandler = errorHandler;
   }
 
+  setHeader(key: string, value: string) {
+    this.#defaultInit.headers = setHeader(this.#defaultInit.headers ?? {}, key, value);
+    return this;
+  }
+  setCredentials(credentials: RequestCredentials) {
+    this.#defaultInit.credentials = credentials;
+    return this;
+  }
+  setMode(mode: RequestMode) {
+    this.#defaultInit.mode = mode;
+    return this;
+  }
+  setTracer(tracer: FetchTracer) {
+    this.#fetchTracer = tracer;
+    return this;
+  }
+
   setResponseHandler(handler: ResponseHandler<T>) {
     this.#responseHandler = handler;
+    return this
   }
+  // new instance with handler
   withResponseHandler(handler: ResponseHandler<T>) {
     return new FetchFactoryAlias(this.#defaultInit, handler, this.#errorHandler);
   }
+
+  // new instance with handler
   withErrorHandler(errHandler: ErrorHandler) {
     return new FetchFactoryAlias(this.#defaultInit, this.#responseHandler, errHandler);
   } 
@@ -152,14 +173,6 @@ class FetchFactory<T = any> extends Callable {
     }
   }
 
-  withHeader(key: string, value: string) {
-    this.#defaultInit.headers = setHeader(this.#defaultInit.headers ?? {}, key, value);
-    return this;
-  }
-
-  withTracer(tracer: FetchTracer) {
-    this.#fetchTracer = tracer;
-  }
 
   get(url: string | URL, init?: RequestInitExt) {
     const options = Object.assign({ method: "GET", }, init);

@@ -65,3 +65,4 @@ export const fetchx = new FetchFactory(
   responseDefaultHandler,
   errorHandler,
 );
+export default fetchx;

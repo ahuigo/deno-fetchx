@@ -1,5 +1,5 @@
 import { assertEquals } from "$std/assert/mod.ts";
-import { fetchx, responseJsonHandler } from "$fetchx/main.ts";
+import fetchx from "$fetchx/main.ts";
 
 Deno.test(async function fetchPostQuery() {
   const res = await fetchx.post("https://httpbin.org/post", {
