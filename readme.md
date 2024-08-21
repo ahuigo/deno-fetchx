@@ -1,4 +1,6 @@
 # FetchX
+## Example
+Refer: https://github.com/ahuigo/deno-fetchx/tree/main/test
 
 ## Post json
 ```

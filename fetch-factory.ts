@@ -59,12 +59,12 @@ function setHeader(headers: HeadersInit, key: string, value: string) {
   return headers;
 }
 
-function setHeaders(headers: HeadersInit, newHeaders: Record<string, string>) {
-  for (const [key, value] of Object.entries(newHeaders)) {
-    setHeader(headers, key, value);
-  }
-  return headers;
-}
+// function setHeaders(headers: HeadersInit, newHeaders: Record<string, string>) {
+//   for (const [key, value] of Object.entries(newHeaders)) {
+//     setHeader(headers, key, value);
+//   }
+//   return headers;
+// }
 
 
 class Callable extends Function {

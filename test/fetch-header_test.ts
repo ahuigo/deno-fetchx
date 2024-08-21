@@ -14,3 +14,16 @@ Deno.test('fetch-cors-nocookie', async function () {
     }).then((res: Response) => res.json());
   assertEquals(res.args.name, "Alex");
 });
+
+Deno.test('fetch-header', async function () {
+  const res = await fetchx.
+    setHeader("Content-Type", "application/x-www-form-urlencoded").
+    post("https://httpbin.org/post", {
+      params: {
+        "name": "Alex",
+      },
+      // credentials: 'omit', // is ok
+      mode: "cors",
+    }).then((res: Response) => res.json());
+  assertEquals(res.args.name, "Alex");
+});
